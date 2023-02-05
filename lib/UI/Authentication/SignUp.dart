@@ -53,13 +53,16 @@ class _signUpScreenState extends State<signUpScreen> {
 
               Center(
                 child: Container(
-                  child: Icon(Icons.person_outline_rounded, color: Colors.black38, size: screenWidth/3,),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Icon(Icons.person_add, color: Colors.black38, size: screenHeight/6,),
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black38,
-                      width: 5
+                      width: 4
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(100))
+                    borderRadius: BorderRadius.all(Radius.circular(200))
                   ),
                 ),
               ),
@@ -88,7 +91,7 @@ class _signUpScreenState extends State<signUpScreen> {
                     ),
                   ),
 
-                  // This container contains the code for name text fiels
+                  // This container contains the code for name text fields
 
                   Container(
                     margin: EdgeInsets.only(
@@ -250,13 +253,13 @@ class _signUpScreenState extends State<signUpScreen> {
                         right: screenWidth / 20,
                         bottom: screenHeight / 50,
                         top: screenHeight / 50),
-                    height: screenHeight / 20,
-                    width: screenWidth,
+                    width: screenWidth/1.15,
+                    height: screenHeight/20,
                     child: Center(
-                      child:  Text("Login", style: TextStyle(fontSize: screenWidth/25, fontWeight: FontWeight.w500),),
+                      child:  Text("Register", style: TextStyle(fontSize: screenWidth/25, fontWeight: FontWeight.w500),),
                     ),
                     decoration: const BoxDecoration(
-                        color: Colors.redAccent,
+                        color: Colors.red,
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                         boxShadow: [
                           BoxShadow(
