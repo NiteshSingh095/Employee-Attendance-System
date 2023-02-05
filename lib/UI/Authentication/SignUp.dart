@@ -10,6 +10,17 @@ class signUpScreen extends StatefulWidget {
 class _signUpScreenState extends State<signUpScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient:LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [Color(0xffeef444c),Color(0xffFA7CBB), Color(0xffF14658)]
+          )
+        ),
+        
+      ),
+    );
   }
 }
