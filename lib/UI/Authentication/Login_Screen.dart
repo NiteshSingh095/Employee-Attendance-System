@@ -1,3 +1,4 @@
+import 'package:attendance_system/UI/Attendance_Screen/HomeScreen.dart';
 import 'package:attendance_system/UI/Authentication/SignUp.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -80,14 +81,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         bottom: screenHeight / 50),
                     width: screenWidth,
                     decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(2, 2))
-                        ]),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(2, 2))
+                      ],
+                    ),
                     child: TextFormField(
                       controller: emailController,
                       decoration: InputDecoration(
@@ -154,26 +156,39 @@ class _LoginScreenState extends State<LoginScreen> {
                           }
                         }),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: screenWidth / 20,
-                        right: screenWidth / 20,
-                        bottom: screenHeight / 50,
-                        top: screenHeight / 50),
-                    height: screenHeight / 20,
-                    width: screenWidth,
-                    child: Center(
-                      child:  Text("Login", style: TextStyle(fontSize: screenWidth/25, fontWeight: FontWeight.w500),),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: screenWidth / 20,
+                          right: screenWidth / 20,
+                          bottom: screenHeight / 50,
+                          top: screenHeight / 50),
+                      height: screenHeight / 20,
+                      width: screenWidth,
+                      child: Center(
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                              fontSize: screenWidth / 25,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      decoration: const BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                offset: Offset(2, 2))
+                          ]),
                     ),
-                    decoration: const BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(2, 2))
-                        ]),
                   )
                 ],
               ),
@@ -187,8 +202,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text("Don't have an account."),
                   TextButton(
-                    onPressed: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => signUpScreen()));
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => signUpScreen()));
                     },
                     child: const Text(
                       'SignUp',
