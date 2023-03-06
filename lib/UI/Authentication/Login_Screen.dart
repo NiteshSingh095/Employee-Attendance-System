@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     margin: EdgeInsets.only(
                         bottom: screenHeight / 100, left: screenWidth / 15),
-                    child: Text(
+                    child: const Text(
                       "Email Id",
                       style: TextStyle(
                           fontSize: 16.0, fontWeight: FontWeight.w500),
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     margin: EdgeInsets.only(
                         bottom: screenHeight / 100, left: screenWidth / 15),
-                    child: Text(
+                    child: const Text(
                       "Password",
                       style: TextStyle(
                           fontSize: 16.0, fontWeight: FontWeight.w500),
