@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 class todayScreen extends StatefulWidget {
@@ -9,6 +10,7 @@ class todayScreen extends StatefulWidget {
 }
 
 class _todayScreenState extends State<todayScreen> {
+
   double screenHeight = 0;
   double screenWidth = 0;
 
@@ -135,22 +137,30 @@ class _todayScreenState extends State<todayScreen> {
             Container(
               alignment: Alignment.centerLeft,
               child: Text(
-                "11 March 2023",
+                DateFormat("dd MMMM yyyy").format(DateTime.now()).toString(),
                 style: TextStyle(
                     fontSize: screenWidth / 18, color: Colors.black54, fontWeight: FontWeight.w500),
               ),
             ),
 
-            //This container contains time
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "19:20:02",
-                style: TextStyle(
-                    fontSize: screenWidth / 20, color: Colors.black54),
-              ),
+            //TThis streamBuilder contains the container which contains time
+            StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot)
+              {
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  margin: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    DateFormat("hh:mm:ss a").format(DateTime.now()).toString(),
+                    style: TextStyle(
+                        fontSize: screenWidth / 20, color: Colors.black54),
+                  ),
+                );
+              },
             ),
 
+            //This container contains the slider for check in and check out task
             Container(
               margin: const EdgeInsets.only(top: 32),
               child: Builder(builder: (context)
