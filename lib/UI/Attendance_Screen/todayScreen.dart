@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 class todayScreen extends StatefulWidget {
   const todayScreen({Key? key}) : super(key: key);
@@ -23,7 +24,6 @@ class _todayScreenState extends State<todayScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-
             // Welcome Text is constant
             Container(
               alignment: Alignment.centerLeft,
@@ -78,16 +78,27 @@ class _todayScreenState extends State<todayScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
                   // Check IN TEXT
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children:  [
-                        Text("Check In", style: TextStyle(fontSize: screenWidth/20,),),
-                       const SizedBox(height: 7,),
-                        Text("19:30", style: TextStyle(fontSize: screenWidth/18, fontWeight: FontWeight.w500),),
+                      children: [
+                        Text(
+                          "Check In",
+                          style: TextStyle(
+                            fontSize: screenWidth / 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        Text(
+                          "19:30",
+                          style: TextStyle(
+                              fontSize: screenWidth / 18,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ],
                     ),
                   ),
@@ -98,9 +109,21 @@ class _todayScreenState extends State<todayScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Check Out", style: TextStyle(fontSize: screenWidth/20,),),
-                        const SizedBox(height: 7,),
-                        Text("14:30", style: TextStyle(fontSize: screenWidth/18, fontWeight: FontWeight.w500),)
+                        Text(
+                          "Check Out",
+                          style: TextStyle(
+                            fontSize: screenWidth / 20,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 7,
+                        ),
+                        Text(
+                          "14:30",
+                          style: TextStyle(
+                              fontSize: screenWidth / 18,
+                              fontWeight: FontWeight.w500),
+                        )
                       ],
                     ),
                   ),
@@ -108,11 +131,46 @@ class _todayScreenState extends State<todayScreen> {
               ),
             ),
 
+            // This container contains date
             Container(
               alignment: Alignment.centerLeft,
+              child: Text(
+                "11 March 2023",
+                style: TextStyle(
+                    fontSize: screenWidth / 18, color: Colors.black54, fontWeight: FontWeight.w500),
+              ),
+            ),
 
-              child: Text("19:20:02", style: TextStyle(fontSize: screenWidth/20, color: Colors.black54),),
-            )
+            //This container contains time
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "19:20:02",
+                style: TextStyle(
+                    fontSize: screenWidth / 20, color: Colors.black54),
+              ),
+            ),
+
+            Container(
+              margin: const EdgeInsets.only(top: 32),
+              child: Builder(builder: (context)
+              {
+                final GlobalKey<SlideActionState> key = GlobalKey();
+
+                return SlideAction(
+                  text: "Slide To Check Out",
+                  textStyle: TextStyle(fontSize: screenWidth/20, color: Colors.black54),
+                  innerColor: primary,
+                  outerColor: Colors.white,
+                  key: key,
+                  onSubmit: (){
+                    key.currentState!.reset();
+
+                  },
+                );
+              }),
+            ),
+
           ],
         ),
       ),
