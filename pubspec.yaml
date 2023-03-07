@@ -45,6 +45,7 @@ dependencies:
   firebase_database: ^10.0.7
   image_picker: ^0.8.6
   font_awesome_flutter: ^10.4.0
+  slide_to_act: ^2.0.1
 
 dev_dependencies:
   flutter_test:
