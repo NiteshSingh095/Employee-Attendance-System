@@ -1,7 +1,13 @@
+import 'package:attendance_system/Firebase_Services/splash_services.dart';
 import 'package:attendance_system/UI/Attendance_Screen/HomeScreen.dart';
+import 'package:attendance_system/UI/Attendance_Screen/profileScreen.dart';
+import 'package:attendance_system/UI/Attendance_Screen/todayScreen.dart';
 import 'package:attendance_system/UI/Authentication/SignUp.dart';
+import 'package:attendance_system/utils/utils.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,6 +17,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  late SharedPreferences sharedPreferences;
+
+  bool loading = false;
+
   double screenHeight = 0;
   double screenWidth = 0;
 
@@ -21,10 +32,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -158,10 +184,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen()));
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          loading = true;
+                        });
+                        login();
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.only(
@@ -172,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: screenHeight / 20,
                       width: screenWidth,
                       child: Center(
-                        child: Text(
+                        child: loading == true ? const CircularProgressIndicator(strokeWidth: 2, color: Colors.white,) : Text(
                           "Login",
                           style: TextStyle(
                               fontSize: screenWidth / 25,
@@ -219,5 +247,55 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void login() {
+    _auth.signInWithEmailAndPassword(
+        email: emailController.text.toString(),
+        password: passwordController.text.toString(),
+    ).then((value) async {
+
+      String emailId = trimId(emailController.text.toString());
+
+      sharedPreferences = await SharedPreferences.getInstance();
+
+      sharedPreferences.setString("employeeId", emailId).then((value){
+        setState(() {
+          loading = false;
+        });
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(emailId: emailId)));
+      });
+
+    }).onError((error, stackTrace){
+
+      setState(() {
+        loading = false;
+      });
+
+      Utils().showToast(error.toString());
+
+    });
+  }
+
+  String trimId(String ? email)
+  {
+    RegExp regExp = RegExp(r'(.*)@gmail.com');
+
+    RegExpMatch? match = regExp.firstMatch(email!);
+
+    String ? data = " ";
+
+    if (match != null) {
+      data = match.group(1);
+      print('Data extracted: $data');
+    } else {
+      print('No match found.');
+    }
+
+    return data!;
   }
 }
