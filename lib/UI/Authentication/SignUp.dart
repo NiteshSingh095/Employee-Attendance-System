@@ -1,4 +1,7 @@
+import 'package:attendance_system/UI/Authentication/Login_Screen.dart';
+import 'package:attendance_system/utils/utils.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class signUpScreen extends StatefulWidget {
@@ -9,6 +12,8 @@ class signUpScreen extends StatefulWidget {
 }
 
 class _signUpScreenState extends State<signUpScreen> {
+  bool loading = false;
+
   double screenHeight = 0;
   double screenWidth = 0;
 
@@ -18,12 +23,23 @@ class _signUpScreenState extends State<signUpScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.orange.shade100,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -37,8 +53,7 @@ class _signUpScreenState extends State<signUpScreen> {
                     top: screenHeight / 12, bottom: screenHeight / 20),
                 child: const Text(
                   "Registration",
-                  style:
-                  TextStyle(fontSize: 30.0, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w500),
                 ),
               ),
             ),
@@ -57,7 +72,7 @@ class _signUpScreenState extends State<signUpScreen> {
                 ),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.black54, width: 4),
-                    borderRadius: BorderRadius.all(Radius.circular(200))),
+                    borderRadius: const BorderRadius.all(Radius.circular(200))),
               ),
             ),
 
@@ -73,7 +88,6 @@ class _signUpScreenState extends State<signUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //This container contains "Name" text
-
                   Container(
                     margin: EdgeInsets.only(
                         bottom: screenHeight / 100, left: screenWidth / 11),
@@ -85,7 +99,6 @@ class _signUpScreenState extends State<signUpScreen> {
                   ),
 
                   // This container contains the code for name text fields
-
                   Container(
                     margin: EdgeInsets.only(
                         left: screenWidth / 20,
@@ -139,7 +152,6 @@ class _signUpScreenState extends State<signUpScreen> {
                   ),
 
                   // This container contains the code for email text box
-
                   Container(
                     margin: EdgeInsets.only(
                         left: screenWidth / 20,
@@ -181,7 +193,6 @@ class _signUpScreenState extends State<signUpScreen> {
                   ),
 
                   // This container contains the code for "Password" text
-
                   Container(
                     margin: EdgeInsets.only(
                         bottom: screenHeight / 100, left: screenWidth / 15),
@@ -193,7 +204,6 @@ class _signUpScreenState extends State<signUpScreen> {
                   ),
 
                   // This container contains the code for password text field
-
                   Container(
                     margin: EdgeInsets.only(
                         left: screenWidth / 20,
@@ -220,8 +230,7 @@ class _signUpScreenState extends State<signUpScreen> {
                           prefixIcon: Icon(Icons.lock),
                           contentPadding: EdgeInsets.all(3.0),
                           border: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(30)),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
                           ),
                         ),
                         validator: (value) {
@@ -238,38 +247,92 @@ class _signUpScreenState extends State<signUpScreen> {
                   ),
 
                   // This container is for button to sign up
-
                   GestureDetector(
-                    onTap: (){
+                      onTap: () {
+                        setState(() {
+                          loading = true;
+                        });
 
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: screenWidth / 20,
-                          right: screenWidth / 20,
-                          bottom: screenHeight / 50,
-                          top: screenHeight / 50),
-                      width: screenWidth / 1.15,
-                      height: screenHeight / 20,
-                      child: Center(
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                              fontSize: screenWidth / 25,
-                              fontWeight: FontWeight.w500),
+                        _auth
+                            .createUserWithEmailAndPassword(
+                                email: emailController.text.toString(),
+                                password: passwordController.text.toString())
+                            .then((value) {
+                          setState(() {
+                            loading = false;
+                          });
+
+                          Utils().showToast("Succesfully Registered");
+
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                        }).onError((error, stackTrace) {
+                          setState(() {
+                            loading = false;
+                          });
+                          Utils().showToast(error.toString());
+                        });
+                      },
+                      child: Ink(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
-                      ),
-                      decoration: const BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black26,
-                                blurRadius: 10,
-                                offset: Offset(2, 2))
-                          ]),
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: screenWidth / 20,
+                              right: screenWidth / 20,
+                              bottom: screenHeight / 50,
+                              top: screenHeight / 50),
+                          width: screenWidth / 1.15,
+                          height: screenHeight / 20,
+                          child: Center(
+                            child: loading == true
+                                ? const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    "Register",
+                                    style: TextStyle(
+                                        fontSize: screenWidth / 25,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                          ),
+                          decoration: const BoxDecoration(
+                              color: Colors.red,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10,
+                                    offset: Offset(2, 2))
+                              ]),
+                        ),
+                      )),
+
+                  //This container contains the text button to move on login screen if alreay signup
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Already have an account."),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                          },
+                          child: const Text(
+                            'Sign In',
+                          ),
+                        )
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
