@@ -22,9 +22,49 @@ class _todayScreenState extends State<todayScreen> {
   double screenHeight = 0;
   double screenWidth = 0;
 
+  String checkIn = "--/--";
+  String checkOut = "--/--";
+
   Color primary = const Color(0xffeef444c);
 
   late String ? empId = Users.username;
+
+  @override
+  void initState() {
+    super.initState();
+    _getRecord();
+  }
+
+  // This function is used for entering check In and check Out time
+  void _getRecord() async
+  {
+    try
+        {
+          QuerySnapshot snap = await FirebaseFirestore.instance
+              .collection("Employee")
+              .where('id', isEqualTo: empId)
+              .get();
+
+          DocumentSnapshot snap2 = await FirebaseFirestore.instance
+              .collection("Employee")
+              .doc(snap.docs[0].id)
+              .collection("Record")
+              .doc(DateFormat("dd MMMM yyyy").format(DateTime.now()))
+              .get();
+
+          setState(() {
+            checkIn = snap2['checkIn'];
+            checkOut = snap2['checkOut'];
+          });
+        }
+        catch(e)
+        {
+          setState(() {
+            checkIn = "--/--";
+            checkOut = "--/--";
+          });
+        }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +226,10 @@ class _todayScreenState extends State<todayScreen> {
                   onSubmit: () async {
                     key.currentState!.reset();
 
-                    // print(DateFormat("dd MMMM yyyy").format(DateTime.now()));
-
                     QuerySnapshot snap = await FirebaseFirestore.instance
                         .collection("Employee")
                         .where('id', isEqualTo: empId)
                         .get();
-                    //
-                    print(snap.docs[0].id);
 
                     DocumentSnapshot snap2 = await FirebaseFirestore.instance
                         .collection("Employee")
@@ -204,7 +240,7 @@ class _todayScreenState extends State<todayScreen> {
 
                     try
                         {
-                          String checkIn = DateFormat("hh : mm").format(DateTime.now());
+                          String checkIn = snap2['checkIn'];
                           await FirebaseFirestore.instance
                               .collection("Employee")
                               .doc(snap.docs[0].id)
