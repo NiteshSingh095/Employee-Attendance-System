@@ -1,4 +1,4 @@
-class User
+class Users
 {
   static String username = " ";
 }

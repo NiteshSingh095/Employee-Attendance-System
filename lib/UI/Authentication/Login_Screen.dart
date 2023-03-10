@@ -1,9 +1,5 @@
-import 'package:attendance_system/Firebase_Services/splash_services.dart';
 import 'package:attendance_system/UI/Attendance_Screen/HomeScreen.dart';
-import 'package:attendance_system/UI/Attendance_Screen/profileScreen.dart';
-import 'package:attendance_system/UI/Attendance_Screen/todayScreen.dart';
 import 'package:attendance_system/UI/Authentication/SignUp.dart';
-import 'package:attendance_system/modal/user.dart';
 import 'package:attendance_system/utils/utils.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
