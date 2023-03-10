@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../modal/user.dart';
+
 class SplashServics
 {
   void isLogin(BuildContext context) async
@@ -22,6 +24,8 @@ class SplashServics
 
     if(user1 != null && user2 != null)
       {
+        Users.username = user2;
+
         Timer(
             const Duration(seconds: 3),
                 () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(emailId: user2,)))
