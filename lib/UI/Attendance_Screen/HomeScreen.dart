@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+
+  String ? emailId = " ";
+
+  HomeScreen({Key? key, required this.emailId}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -15,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double screenHeight = 0;
   double screenWidth = 0;
 
-  int currentIndex = 0;
+  int currentIndex = 1;
 
   Color primary = const Color(0xffeef444c);
 
@@ -33,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,
-        children: const [
+        children: [
           calendarScreen(),
-          todayScreen(),
+          todayScreen(emailId: widget.emailId),
           profileScreen()
         ],
 
