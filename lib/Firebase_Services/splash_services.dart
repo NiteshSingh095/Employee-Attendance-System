@@ -24,7 +24,7 @@ class SplashServics
 
     if(user1 != null && user2 != null)
       {
-        Users.username = user2;
+        Users.employeeId = user2;
 
         Timer(
             const Duration(seconds: 3),

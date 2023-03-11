@@ -262,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
       sharedPreferences.setString("employeeId", emailId).then((value) async {
         setState(() {
           loading = false;
-          Users.username = emailId;
+          Users.employeeId = emailId;
         });
         
         await FirebaseFirestore.instance.collection("Employee").add({"id":emailId});

@@ -30,7 +30,7 @@ class _todayScreenState extends State<todayScreen> {
 
   Color primary = const Color(0xffeef444c);
 
-  late String? empId = Users.username;
+  late String? empId = Users.employeeId;
 
   @override
   void initState() {
@@ -325,6 +325,6 @@ class _todayScreenState extends State<todayScreen> {
   {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    sharedPreferences.remove(Users.username);
+    sharedPreferences.remove(Users.employeeId);
   }
 }
