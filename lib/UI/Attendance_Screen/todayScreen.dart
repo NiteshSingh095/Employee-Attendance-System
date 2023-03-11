@@ -3,15 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-
 import '../../modal/user.dart';
 import '../Authentication/Login_Screen.dart';
 
 class todayScreen extends StatefulWidget {
-  String? emailId = "";
 
-  todayScreen({Key? key, required this.emailId}) : super(key: key);
+  const todayScreen({Key? key}) : super(key: key);
 
   @override
   State<todayScreen> createState() => _todayScreenState();
@@ -88,6 +87,7 @@ class _todayScreenState extends State<todayScreen> {
               child: IconButton(
                   onPressed: (){
                     _auth.signOut();
+                    logout();
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   icon: const Icon(Icons.logout, color: Colors.black,)
@@ -319,5 +319,12 @@ class _todayScreenState extends State<todayScreen> {
         ),
       ),
     );
+  }
+
+  void logout() async
+  {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    sharedPreferences.remove(Users.username);
   }
 }
