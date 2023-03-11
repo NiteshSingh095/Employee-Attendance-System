@@ -28,7 +28,7 @@ class SplashServics
 
         Timer(
             const Duration(seconds: 3),
-                () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(emailId: user2,)))
+                () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()))
         );
       }
     else

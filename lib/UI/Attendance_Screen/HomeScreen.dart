@@ -6,9 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
 
-  String ? emailId = " ";
-
-  HomeScreen({Key? key, required this.emailId}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -38,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         index: currentIndex,
         children: [
           calendarScreen(),
-          todayScreen(emailId: widget.emailId),
+          todayScreen(),
           profileScreen()
         ],
 
