@@ -1,10 +1,13 @@
 import 'package:attendance_system/UI/Attendance_Screen/HomeScreen.dart';
 import 'package:attendance_system/UI/Authentication/SignUp.dart';
 import 'package:attendance_system/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../modal/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -256,15 +259,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
       sharedPreferences = await SharedPreferences.getInstance();
 
-      sharedPreferences.setString("employeeId", emailId).then((value){
+      sharedPreferences.setString("employeeId", emailId).then((value) async {
         setState(() {
           loading = false;
+          Users.username = emailId;
         });
+        
+        await FirebaseFirestore.instance.collection("Employee").add({"id":emailId});
 
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => HomeScreen(emailId: emailId)));
+                builder: (context) => HomeScreen()));
       });
 
     }).onError((error, stackTrace){
