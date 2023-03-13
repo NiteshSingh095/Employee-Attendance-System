@@ -253,10 +253,6 @@ class _todayScreenState extends State<todayScreen> {
                         key: key,
                         onSubmit: () async {
 
-                          Timer(const Duration(seconds: 1), () {
-                            key.currentState!.reset();
-                          });
-
                           QuerySnapshot snap = await FirebaseFirestore.instance
                               .collection("Employee")
                               .where('id', isEqualTo: empId)
@@ -300,10 +296,16 @@ class _todayScreenState extends State<todayScreen> {
                                 .doc(DateFormat("dd MMMM yyyy")
                                     .format(DateTime.now()))
                                 .set({
-                              'checkIn':
-                                  checkIn
+                              'checkIn': checkIn,
+                              'checkOut': checkOut
                             });
                           }
+
+                          // This controls the slider reset function
+                          Future.delayed(Duration(milliseconds: 200), (){
+                            key.currentState!.reset();
+                          });
+
                         },
                       );
                     }),
