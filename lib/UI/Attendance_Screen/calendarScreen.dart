@@ -107,6 +107,14 @@ class _calendarScreenState extends State<calendarScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+
+                                  Expanded(
+                                    child : Container(
+                                      decoration: BoxDecoration(
+
+                                      ),
+                                    )
+                                  ),
                                   // Check IN TEXT
                                   Expanded(
                                     child: Column(
