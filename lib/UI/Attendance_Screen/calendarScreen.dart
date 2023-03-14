@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 import '../../modal/user.dart';
 
@@ -19,6 +20,8 @@ class _calendarScreenState extends State<calendarScreen> {
   double screenWidth = 0;
 
   Color primary = const Color(0xffeef444c);
+
+   var _month = DateFormat("MMMM").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -52,20 +55,37 @@ class _calendarScreenState extends State<calendarScreen> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.only(top: 32),
                   child: Text(
-                    DateFormat("MMMM").format(DateTime.now()),
+                    _month,
                     style: TextStyle(
                         color: Colors.black, fontSize: screenWidth / 18, fontWeight: FontWeight.w500),
                   ),
                 ),
 
                 //This container contains the month picker
-                Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(top: 32),
-                  child: Text(
-                    "Pick a Month",
-                    style: TextStyle(
-                        color: Colors.black, fontSize: screenWidth / 18, fontWeight: FontWeight.w500),
+                GestureDetector(
+                  onTap: () async {
+                    final month = await showMonthYearPicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2022),
+                        lastDate: DateTime(2099)
+                    );
+
+                    if(month != null)
+                      {
+                        setState(() {
+                          _month = DateFormat("MMMM").format(month);
+                        });
+                      }
+                  },
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    margin: const EdgeInsets.only(top: 32),
+                    child: Text(
+                      "Pick a Month",
+                      style: TextStyle(
+                          color: Colors.black, fontSize: screenWidth / 18, fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
               ],
@@ -98,7 +118,7 @@ class _calendarScreenState extends State<calendarScreen> {
                           itemBuilder: (context, index)
                           {
                             // This container contains the box to display checkIn and checkOut time of employee
-                            return DateFormat("MMMM").format(snap[index]['date'].toDate(),) == "March" ? Container(
+                            return DateFormat("MMMM").format(snap[index]['date'].toDate(),) == _month ? Container(
                               margin: const EdgeInsets.only(top: 2, bottom: 20, left: 5, right: 5),
                               height: 150,
                               decoration: const BoxDecoration(
@@ -116,6 +136,7 @@ class _calendarScreenState extends State<calendarScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
 
+                                  // This container contains the text for showing dates and week days
                                   Expanded(
                                     child : Container(
                                       decoration: BoxDecoration(
@@ -130,6 +151,7 @@ class _calendarScreenState extends State<calendarScreen> {
                                       ),
                                     )
                                   ),
+
                                   // Check IN TEXT
                                   Expanded(
                                     child: Column(
@@ -181,7 +203,8 @@ class _calendarScreenState extends State<calendarScreen> {
                                   ),
                                 ],
                               ),
-                            ) : const SizedBox();
+                            )
+                                : const SizedBox();
                           },
                         );
                       }
