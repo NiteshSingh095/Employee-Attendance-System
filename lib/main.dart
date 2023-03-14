@@ -2,6 +2,7 @@ import 'package:attendance_system/UI/Authentication/Login_Screen.dart';
 import 'package:attendance_system/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: const [
+        MonthYearPickerLocalizations.delegate
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
