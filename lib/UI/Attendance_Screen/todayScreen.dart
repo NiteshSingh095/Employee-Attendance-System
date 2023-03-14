@@ -281,6 +281,7 @@ class _todayScreenState extends State<todayScreen> {
                                 .doc(DateFormat("dd MMMM yyyy")
                                     .format(DateTime.now()))
                                 .update({
+                              'date': Timestamp.now(),
                               'checkIn': checkIn,
                               'checkOut':
                                   DateFormat("hh : mm").format(DateTime.now())
@@ -296,6 +297,7 @@ class _todayScreenState extends State<todayScreen> {
                                 .doc(DateFormat("dd MMMM yyyy")
                                     .format(DateTime.now()))
                                 .set({
+                              'date': Timestamp.now(),
                               'checkIn': checkIn,
                               'checkOut': checkOut
                             });
