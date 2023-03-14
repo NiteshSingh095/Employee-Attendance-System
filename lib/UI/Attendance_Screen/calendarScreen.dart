@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -80,7 +82,13 @@ class _calendarScreenState extends State<calendarScreen> {
                   {
                     if(!snapshot.hasData)
                       {
-                        return CircularProgressIndicator();
+                        return Center(
+                          child: Transform.rotate(
+                            angle: -pi / 2, // -90 degrees in radians
+                            child: const CircularProgressIndicator(color: Colors.black,),
+                          ),
+                        );
+
                       }
                     else
                       {
@@ -90,7 +98,7 @@ class _calendarScreenState extends State<calendarScreen> {
                           itemBuilder: (context, index)
                           {
                             // This container contains the box to display checkIn and checkOut time of employee
-                            return Container(
+                            return DateFormat("MMMM").format(snap[index]['date'].toDate(),) == "March" ? Container(
                               margin: const EdgeInsets.only(top: 2, bottom: 20, left: 5, right: 5),
                               height: 150,
                               decoration: const BoxDecoration(
@@ -111,7 +119,14 @@ class _calendarScreenState extends State<calendarScreen> {
                                   Expanded(
                                     child : Container(
                                       decoration: BoxDecoration(
-
+                                        color: primary,
+                                        borderRadius: const BorderRadius.all(Radius.circular(20))
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          DateFormat("EE dd").format(snap[index]['date'].toDate(),),
+                                          style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w600, fontSize: 17),
+                                        ),
                                       ),
                                     )
                                   ),
@@ -166,7 +181,7 @@ class _calendarScreenState extends State<calendarScreen> {
                                   ),
                                 ],
                               ),
-                            );
+                            ) : const SizedBox();
                           },
                         );
                       }
