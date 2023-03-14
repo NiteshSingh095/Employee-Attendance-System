@@ -68,7 +68,25 @@ class _calendarScreenState extends State<calendarScreen> {
                         context: context,
                         initialDate: DateTime.now(),
                         firstDate: DateTime(2022),
-                        lastDate: DateTime(2099)
+                        lastDate: DateTime(2099),
+                      builder: (context, child)
+                        {
+                          return Theme(
+                              data: Theme.of(context).copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: primary,
+                                  secondary: primary,
+                                  onSecondary: Colors.white
+                                ),
+                                textTheme: const TextTheme(
+                                  headline4: TextStyle(fontWeight: FontWeight.bold),
+                                  overline: TextStyle(fontWeight: FontWeight.w700),
+                                  button: TextStyle(fontWeight: FontWeight.w700),
+                                )
+                              ),
+                              child: child!
+                          );
+                        }
                     );
 
                     if(month != null)
