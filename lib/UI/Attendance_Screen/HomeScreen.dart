@@ -1,6 +1,7 @@
 import 'package:attendance_system/UI/Attendance_Screen/calendarScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/profileScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/todayScreen.dart';
+import 'package:attendance_system/services/location_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,7 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _startLocationService();
     getId();
+  }
+
+  void _startLocationService() async
+  {
+    LocationService().initialize();
+
+    LocationService().getLatitude().then((value)
+    {
+      setState(() {
+        Users.lat = value!;
+      });
+    });
+
+    LocationService().getLongitude().then((value)
+    {
+      setState(() {
+        Users.long = value!;
+      });
+    });
+
   }
 
   void getId() async
