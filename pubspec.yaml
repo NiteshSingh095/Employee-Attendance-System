@@ -49,6 +49,8 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.0.18
   month_year_picker: ^0.2.0+3
+  geocoding: ^2.1.0
+  location: ^4.4.0
 
 dev_dependencies:
   flutter_test:
