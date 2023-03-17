@@ -37,27 +37,27 @@ class _HomeScreenState extends State<HomeScreen> {
     getId();
   }
 
-  void _startLocationService() async
+  Future<void> _startLocationService() async
   {
     LocationService().initialize();
-
-    LocationService().getLatitude().then((value)
-    {
-      setState(() {
-        Users.lat = value!;
-      });
-    });
 
     LocationService().getLongitude().then((value)
     {
       setState(() {
         Users.long = value!;
       });
+
+      LocationService().getLatitude().then((value)
+      {
+        setState(() {
+          Users.lat = value!;
+        });
+      });
     });
 
   }
 
-  void getId() async
+  Future<void> getId() async
   {
     QuerySnapshot snap = await FirebaseFirestore.instance
         .collection("Employee")

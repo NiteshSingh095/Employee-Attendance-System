@@ -398,7 +398,10 @@ class _todayScreenState extends State<todayScreen> {
                       style: TextStyle(fontSize: screenWidth / 20),
                     ),
                   ),
-            location != " " ? Text("Location" + location) : const SizedBox(),
+
+            SizedBox(height: 20,),
+            // This widget is used to display the location of person
+            location != " " ? Container(child: Text("Location" + location)) : const SizedBox(child: Text("Not displaying"),),
           ],
         ),
       ),
