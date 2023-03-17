@@ -46,7 +46,7 @@ class _todayScreenState extends State<todayScreen> {
     List<Placemark> placemark = await placemarkFromCoordinates(Users.lat, Users.long);
 
     setState(() {
-      location = '${placemark[0].street}, ${placemark[0].administrativeArea},${placemark[0].postalCode}, ${placemark[0].country}';
+      location = '${placemark[0].street}, ${placemark[0].administrativeArea}, ${placemark[0].postalCode}, ${placemark[0].country}';
     });
   }
 
@@ -300,7 +300,7 @@ class _todayScreenState extends State<todayScreen> {
                                   'date': Timestamp.now(),
                                   'checkIn': checkIn,
                                   'checkOut': DateFormat("hh : mm").format(DateTime.now()),
-                                  'location': location
+                                  'checkInlocation': location
                                 });
                               } catch (e) {
                                 setState(() {
@@ -316,7 +316,7 @@ class _todayScreenState extends State<todayScreen> {
                                   'date': Timestamp.now(),
                                   'checkIn': checkIn,
                                   'checkOut': checkOut,
-                                  'location': location,
+                                  'checkOutlocation': location,
                                 });
                               }
 
@@ -361,7 +361,7 @@ class _todayScreenState extends State<todayScreen> {
                                     'date': Timestamp.now(),
                                     'checkIn': checkIn,
                                     'checkOut': DateFormat("hh : mm").format(DateTime.now()),
-                                    'location': location
+                                    'checkInlocation': location
                                   });
                                 } catch (e) {
                                   setState(() {
@@ -377,7 +377,7 @@ class _todayScreenState extends State<todayScreen> {
                                     'date': Timestamp.now(),
                                     'checkIn': checkIn,
                                     'checkOut': checkOut,
-                                    'location': location,
+                                    'checkOutlocation': location,
                                   });
                                 }
 
@@ -401,7 +401,10 @@ class _todayScreenState extends State<todayScreen> {
 
             SizedBox(height: 20,),
             // This widget is used to display the location of person
-            location != " " ? Container(child: Text("Location" + location)) : const SizedBox(child: Text("Not displaying"),),
+            location != " " ? Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Container(child: Text("Location : " + location)),
+            ) : const SizedBox(child: Text("Not displaying"),),
           ],
         ),
       ),
