@@ -4,4 +4,9 @@ class Users
   static String employeeId = " ";
   static double lat = 0;
   static double long = 0;
+  static String firstName = "";
+  static String lastName = "";
+  static String address = "";
+  static String birthDate = "";
+  static bool canEdit = true;
 }
