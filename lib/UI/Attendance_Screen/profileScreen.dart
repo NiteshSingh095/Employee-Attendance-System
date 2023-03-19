@@ -10,57 +10,92 @@ class profileScreen extends StatefulWidget {
 
 class _profileScreenState extends State<profileScreen> {
 
+  double screenHeight = 0;
+  double screenWidth = 0;
+
   Color primary = const Color(0xffeef444c);
 
   @override
   Widget build(BuildContext context) {
+
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      body: Column(
-        children: [
+      body: SingleChildScrollView(
 
-          // This container will store the picture of employee
-          Container(
-            margin: const EdgeInsets.only(top: 80, bottom: 20),
-            alignment: Alignment.center,
-            height: 120,
-            width: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: primary
-            ),
+        child: Column(
+          children: [
 
-            child: const Center(
-              child : Icon(
-                  Icons.person,
-                color: Colors.white,
-                size: 80,
-              )
-            ),
-          ),
+            // This container will store the picture of employee
+            Container(
+              margin: const EdgeInsets.only(top: 80, bottom: 20),
+              alignment: Alignment.center,
+              height: 120,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: primary
+              ),
 
-          // This contains the text for employee Id
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-                "Employee : " + Users.employeeId,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500
+              child: const Center(
+                child : Icon(
+                    Icons.person,
+                  color: Colors.white,
+                  size: 80,
+                )
               ),
             ),
-          ),
 
-          const SizedBox(height: 24,),
+            // This contains the text for employee Id
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                  "Employee : " + Users.employeeId,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+            ),
 
-          // This field is used to get the first name of employee
-          textField("First Name","First Name"),
+            const SizedBox(height: 24,),
 
-        //  This field is used to get the last name of employee
-          textField("Last Name","Last Name"),
+            // This field is used to get the first name of employee
+            textField("First Name","First Name"),
 
-          // This field is used to store address of employee
-          textField("Address","Address"),
-        ],
+          //  This field is used to get the last name of employee
+            textField("Last Name","Last Name"),
+
+            // This container contains the constant Date of Birth text
+            const Padding(
+              padding: EdgeInsets.only(top: 10.0, left: 14.0, bottom: 4),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Date of Birth", style: const TextStyle(fontWeight: FontWeight.w500),),
+              ),
+            ),
+
+            // This container contains the date of birth field
+            Container(
+              margin: const EdgeInsets.only(left: 13, right: 13),
+              height: kTextTabBarHeight*1.15,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: Colors.black54)
+              ),
+              child: Container(
+                padding: const EdgeInsets.only(left: 10),
+                alignment: Alignment.centerLeft,
+                child: const Text("Date of Birth", style: TextStyle(color: Colors.black54, fontSize: 16),),
+              ),
+            ),
+
+            // This field is used to store address of employee
+            textField("Address","Address"),
+          ],
+        ),
       )
     );
   }
