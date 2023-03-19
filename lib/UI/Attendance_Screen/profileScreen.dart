@@ -50,21 +50,57 @@ class _profileScreenState extends State<profileScreen> {
             ),
           ),
 
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: "hint",
-              hintStyle: TextStyle(
-                color: Colors.black54
-              ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black54
-                )
-              )
-            ),
-          )
+          const SizedBox(height: 24,),
+
+          // This field is used to get the first name of employee
+          textField("First Name","First Name"),
+
+        //  This field is used to get the last name of employee
+          textField("Last Name","Last Name"),
+
+          // This field is used to store address of employee
+          textField("Address","Address"),
         ],
       )
+    );
+  }
+
+  Widget textField(String title,String hint)
+  {
+    return Column(
+      children: [
+        const SizedBox(height: 10,),
+        Padding(
+          padding: const EdgeInsets.only(left: 14.0, bottom: 4),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(title, style: const TextStyle(fontWeight: FontWeight.w500),),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 13.0, right: 13.0),
+          child: TextFormField(
+            cursorColor: Colors.black54,
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: const TextStyle(
+                  color: Colors.black54
+              ),
+              enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.black54
+                  )
+              ),
+              focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: Colors.black54
+                  )
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
