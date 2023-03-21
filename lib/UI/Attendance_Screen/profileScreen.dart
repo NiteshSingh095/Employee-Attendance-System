@@ -1,5 +1,6 @@
 import 'package:attendance_system/modal/user.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class profileScreen extends StatefulWidget {
   const profileScreen({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _profileScreenState extends State<profileScreen> {
 
             // This container will store the picture of employee
             Container(
-              margin: const EdgeInsets.only(top: 80, bottom: 20),
+              margin: const EdgeInsets.only(top: 45, bottom: 20),
               alignment: Alignment.center,
               height: 120,
               width: 100,
@@ -59,7 +60,7 @@ class _profileScreenState extends State<profileScreen> {
               ),
             ),
 
-            const SizedBox(height: 24,),
+            const SizedBox(height: 15,),
 
             // This field is used to get the first name of employee
             textField("First Name","First Name"),
@@ -77,23 +78,77 @@ class _profileScreenState extends State<profileScreen> {
             ),
 
             // This container contains the date of birth field
-            Container(
-              margin: const EdgeInsets.only(left: 13, right: 13),
-              height: kTextTabBarHeight*1.15,
-              width: screenWidth,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: Colors.black54)
-              ),
+            GestureDetector(
+              onTap: (){
+                showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                    builder: (context, child)
+                    {
+                      return Theme(
+                          data: Theme.of(context).copyWith(
+                              colorScheme: ColorScheme.light(
+                                  primary: primary,
+                                  secondary: primary,
+                                  onSecondary: Colors.white
+                              ),
+                              textTheme: const TextTheme(
+                                headline4: TextStyle(fontWeight: FontWeight.bold),
+                                overline: TextStyle(fontWeight: FontWeight.w700),
+                                button: TextStyle(fontWeight: FontWeight.w700),
+                              )
+                          ),
+                          child: child!
+                      );
+                    }
+                ).then((value)
+                {
+                  setState(() {
+                    Users.birthDate = DateFormat("dd-MM-yyyy").format(value!);
+                  });
+                });
+              },
               child: Container(
-                padding: const EdgeInsets.only(left: 10),
-                alignment: Alignment.centerLeft,
-                child: const Text("Date of Birth", style: TextStyle(color: Colors.black54, fontSize: 16),),
+                margin: const EdgeInsets.only(left: 13, right: 13),
+                height: kTextTabBarHeight*1.15,
+                width: screenWidth,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: Colors.black54)
+                ),
+                child: Container(
+                  padding: const EdgeInsets.only(left: 10),
+                  alignment: Alignment.centerLeft,
+                  child:Text(Users.birthDate, style: const TextStyle(color: Colors.black54, fontSize: 16),),
+                ),
               ),
             ),
 
             // This field is used to store address of employee
             textField("Address","Address"),
+
+            GestureDetector(
+              onTap: (){
+
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 13, right: 13, top: 10),
+                height: kTextTabBarHeight,
+                width: screenWidth,
+                decoration: BoxDecoration(
+                  color: primary,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.black54)
+                ),
+                child: Center(
+                  child: Container(
+                    child: const Text("Save", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       )
