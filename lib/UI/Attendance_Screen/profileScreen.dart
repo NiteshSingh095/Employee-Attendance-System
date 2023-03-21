@@ -14,7 +14,13 @@ class _profileScreenState extends State<profileScreen> {
   double screenHeight = 0;
   double screenWidth = 0;
 
+  String birth = "Date of Birth";
+
   Color primary = const Color(0xffeef444c);
+
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +69,10 @@ class _profileScreenState extends State<profileScreen> {
             const SizedBox(height: 15,),
 
             // This field is used to get the first name of employee
-            textField("First Name","First Name"),
+            textField("First Name","First Name", firstNameController),
 
           //  This field is used to get the last name of employee
-            textField("Last Name","Last Name"),
+            textField("Last Name","Last Name", lastNameController),
 
             // This container contains the constant Date of Birth text
             const Padding(
@@ -106,7 +112,7 @@ class _profileScreenState extends State<profileScreen> {
                 ).then((value)
                 {
                   setState(() {
-                    Users.birthDate = DateFormat("dd-MM-yyyy").format(value!);
+                    birth = DateFormat("dd-MM-yyyy").format(value!);
                   });
                 });
               },
@@ -121,17 +127,43 @@ class _profileScreenState extends State<profileScreen> {
                 child: Container(
                   padding: const EdgeInsets.only(left: 10),
                   alignment: Alignment.centerLeft,
-                  child:Text(Users.birthDate, style: const TextStyle(color: Colors.black54, fontSize: 16),),
+                  child:Text(birth, style: const TextStyle(color: Colors.black54, fontSize: 16),),
                 ),
               ),
             ),
 
             // This field is used to store address of employee
-            textField("Address","Address"),
+            textField("Address","Address", addressController),
 
+            // This button is used to save all the information present in above fields
             GestureDetector(
-              onTap: (){
+              onTap: () async
+              {
+                String firstName = firstNameController.text.toString();
+                String lastName = lastNameController.text.toString();
+                String birth1 = birth.toString();
+                String address = addressController.text.toString();
 
+                if(firstName.isEmpty)
+                  {
+                    showSnackbar("Enter your first Name");
+                  }
+                else if(lastName.isEmpty)
+                  {
+                    showSnackbar("Enter your last Name");
+                  }
+                else if(birth1.isEmpty)
+                  {
+                    showSnackbar("Select Date of Birth");
+                  }
+                else if(address.isEmpty)
+                  {
+                    showSnackbar("Enter your address");
+                  }
+                else
+                  {
+
+                  }
               },
               child: Container(
                 margin: const EdgeInsets.only(left: 13, right: 13, top: 10),
@@ -144,7 +176,14 @@ class _profileScreenState extends State<profileScreen> {
                 ),
                 child: Center(
                   child: Container(
-                    child: const Text("Save", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),),
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -155,7 +194,7 @@ class _profileScreenState extends State<profileScreen> {
     );
   }
 
-  Widget textField(String title,String hint)
+  Widget textField(String title,String hint, TextEditingController controller)
   {
     return Column(
       children: [
@@ -170,6 +209,7 @@ class _profileScreenState extends State<profileScreen> {
         Padding(
           padding: const EdgeInsets.only(left: 13.0, right: 13.0),
           child: TextFormField(
+            controller: controller,
             cursorColor: Colors.black54,
             maxLines: 1,
             decoration: InputDecoration(
@@ -191,6 +231,16 @@ class _profileScreenState extends State<profileScreen> {
           ),
         ),
       ],
+    );
+  }
+  
+  void showSnackbar(String text)
+  {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+          content: Text(text,),
+      )
     );
   }
 }
