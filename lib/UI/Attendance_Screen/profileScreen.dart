@@ -1,4 +1,5 @@
 import 'package:attendance_system/modal/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -166,7 +167,16 @@ class _profileScreenState extends State<profileScreen> {
                       }
                       else
                       {
-
+                        await FirebaseFirestore.instance
+                            .collection("Employee")
+                            .doc(Users.id)
+                            .update({
+                          'firstName' : firstName,
+                          'lastName' : lastName,
+                          'birthDate' : birth,
+                          'address' : address,
+                          'canEdit' : false
+                        });
                       }
                     }
                   else
