@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:attendance_system/modal/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class profileScreen extends StatefulWidget {
@@ -22,6 +26,27 @@ class _profileScreenState extends State<profileScreen> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
+  void uploadProfilePic() async
+  {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 90
+    );
+
+    Reference ref = FirebaseStorage.instance
+        .ref().child('${Users.employeeId.toLowerCase()}_profilepic.jpg');
+
+    await ref.putFile(File(image!.path));
+
+    ref.getDownloadURL().then((value){
+      setState(() {
+        Users.profilePicLink = value!;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
