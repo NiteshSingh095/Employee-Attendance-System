@@ -8,5 +8,6 @@ class Users
   static String lastName = "";
   static String address = "";
   static String birthDate = "";
+  static String profilePicLink = "";
   static bool canEdit = true;
 }
