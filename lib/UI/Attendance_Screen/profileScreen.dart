@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:attendance_system/modal/user.dart';
+import 'package:attendance_system/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class _profileScreenState extends State<profileScreen> {
   double screenWidth = 0;
 
   String birth = "Date of Birth";
+  File? image;
+  final _picker = ImagePicker();
 
   Color primary = const Color(0xffeef444c);
 
@@ -33,17 +36,21 @@ class _profileScreenState extends State<profileScreen> {
       source: ImageSource.gallery,
       maxHeight: 512,
       maxWidth: 512,
-      imageQuality: 90
+      imageQuality: 90,
     );
 
     Reference ref = FirebaseStorage.instance
-        .ref().child('${Users.employeeId.toLowerCase()}_profilepic.jpg');
+        .ref().child("${Users.employeeId.toLowerCase()}_profilepic.jpg");
 
     await ref.putFile(File(image!.path));
 
-    ref.getDownloadURL().then((value){
+    ref.getDownloadURL().then((value) async {
       setState(() {
-        Users.profilePicLink = value!;
+        Users.profilePicLink = value;
+      });
+
+      await FirebaseFirestore.instance.collection("Employee").doc(Users.id).update({
+        'profilePic': value,
       });
     });
   }
@@ -63,22 +70,31 @@ class _profileScreenState extends State<profileScreen> {
             children: [
 
               // This container will store the picture of employee
-              Container(
-                margin: const EdgeInsets.only(top: 45, bottom: 20),
-                alignment: Alignment.center,
-                height: 120,
-                width: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: primary
-                ),
+              GestureDetector(
+                onTap: (){
+                  uploadProfilePic();
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 45, bottom: 20),
+                  alignment: Alignment.center,
+                  height: 120,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: primary
+                  ),
 
-                child: const Center(
-                  child : Icon(
-                      Icons.person,
-                    color: Colors.white,
-                    size: 80,
-                  )
+                  child: Center(
+                    child : Users.profilePicLink == "" ? const Icon(
+                        Icons.person,
+                      color: Colors.white,
+                      size: 80,
+                    ) :
+                    Image(
+                        image: NetworkImage(Users.profilePicLink),
+                      fit: BoxFit.cover,
+                    )
+                  ),
                 ),
               ),
 
@@ -201,6 +217,8 @@ class _profileScreenState extends State<profileScreen> {
                           'birthDate' : birth,
                           'address' : address,
                           'canEdit' : false
+                        }).then((value){
+                          Utils().showToast("User Data uploaded successfully");
                         });
                       }
                     }
