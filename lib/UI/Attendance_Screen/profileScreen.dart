@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:attendance_system/modal/user.dart';
 import 'package:attendance_system/utils/utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _profileScreenState extends State<profileScreen> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  void uploadProfilePic() async
+  Future<void> uploadProfilePic() async
   {
     final image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -91,7 +92,7 @@ class _profileScreenState extends State<profileScreen> {
                       size: 80,
                     ) :
                     Image(
-                        image: NetworkImage(Users.profilePicLink),
+                      image: NetworkImage(Users.profilePicLink),
                       fit: BoxFit.cover,
                     )
                   ),
