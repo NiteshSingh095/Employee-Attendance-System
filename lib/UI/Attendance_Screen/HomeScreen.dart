@@ -2,10 +2,10 @@ import 'package:attendance_system/UI/Attendance_Screen/calendarScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/profileScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/todayScreen.dart';
 import 'package:attendance_system/services/location_service.dart';
+import 'package:attendance_system/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../modal/user.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,21 +24,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Color primary = const Color(0xffeef444c);
 
+  @override
+  void initState() {
+    super.initState();
+    getId().then((value){
+      _getProfilePic();
+      _getCredentials();
+    });
+    _startLocationService();
+  }
+
   List<IconData> navigationIcons = [
     FontAwesomeIcons.calendarDays,
     FontAwesomeIcons.check,
     FontAwesomeIcons.user
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _startLocationService();
-    _getCredentials();
-    getId();
+  void _getCredentials() async
+  {
+    try
+        {
+          DocumentSnapshot doc = await FirebaseFirestore.instance
+              .collection("Employee")
+              .doc(Users.id)
+              .get();
+
+          setState(() {
+            Users.canEdit = doc['canEdit'];
+            Users.firstName = doc['firstName'];
+            Users.lastName = doc['lastName'];
+            Users.birthDate = doc['birthDate'];
+            Users.address = doc['address'];
+          });
+        }
+        catch(e)
+    {
+      Utils().showToast(e.toString());
+    }
   }
 
-  Future<void> _getCredentials() async
+  Future<void> _getProfilePic() async
   {
     DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection("Employee")
@@ -46,11 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .get();
 
     setState(() {
-      Users.canEdit = doc['canEdit'];
-      Users.firstName = doc['firstName'];
-      Users.lastName = doc['lastName'];
-      Users.birthDate = doc['birthDate'];
-      Users.address = doc['address'];
+      Users.profilePicLink = doc['profilePic'];
     });
   }
 
