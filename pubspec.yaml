@@ -51,6 +51,7 @@ dependencies:
   month_year_picker: ^0.2.0+3
   geocoding: ^2.1.0
   location: ^4.4.0
+  cached_network_image: ^3.2.3
 
 dev_dependencies:
   flutter_test:
