@@ -181,7 +181,7 @@ class _profileScreenState extends State<profileScreen> {
               textField("Address","Address", addressController),
 
               // This button is used to save all the information present in above fields
-              GestureDetector(
+              Users.canEdit ? GestureDetector(
                 onTap: () async
                 {
                   String firstName = firstNameController.text.toString();
@@ -250,7 +250,8 @@ class _profileScreenState extends State<profileScreen> {
                     ),
                   ),
                 ),
-              ),
+              )
+                  : const SizedBox(),
             ],
           ),
         ),
