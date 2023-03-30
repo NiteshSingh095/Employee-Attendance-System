@@ -24,21 +24,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Color primary = const Color(0xffeef444c);
 
-  @override
-  void initState() {
-    super.initState();
-    getId().then((value){
-      _getProfilePic();
-      _getCredentials();
-    });
-    _startLocationService();
-  }
-
   List<IconData> navigationIcons = [
     FontAwesomeIcons.calendarDays,
     FontAwesomeIcons.check,
     FontAwesomeIcons.user
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    getId().then((value){
+      _getCredentials();
+      _getProfilePic();
+      setState(() {
+
+      });
+    });
+    _startLocationService();
+  }
 
   void _getCredentials() async
   {
@@ -63,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _getProfilePic() async
+  void _getProfilePic() async
   {
     DocumentSnapshot doc = await FirebaseFirestore.instance
         .collection("Employee")
@@ -115,12 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: IndexedStack(
         index: currentIndex,
-        children: const [
+        children:  [
           calendarScreen(),
           todayScreen(),
           profileScreen()
         ],
-
       ),
       bottomNavigationBar: Container(
         height: 70,
