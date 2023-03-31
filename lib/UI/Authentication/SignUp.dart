@@ -1,5 +1,6 @@
 import 'package:attendance_system/UI/Authentication/Login_Screen.dart';
 import 'package:attendance_system/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -258,11 +259,10 @@ class _signUpScreenState extends State<signUpScreen> {
                                 email: emailController.text.toString(),
                                 password: passwordController.text.toString())
                             .then((value) {
+                              createNewUser();
                           setState(() {
                             loading = false;
                           });
-
-                          Utils().showToast("Succesfully Registered");
 
                           Navigator.pushReplacement(
                               context,
@@ -341,4 +341,36 @@ class _signUpScreenState extends State<signUpScreen> {
       ),
     );
   }
+
+  void createNewUser() async {
+
+    String userId = trimId(emailController.text.toString());
+
+    await FirebaseFirestore.instance.collection("Employee").add({
+      'id': userId,
+      'name': nameController.text.toString(),
+      'email': emailController.text.toString(),
+    });
+
+    Utils().showToast("New User added");
+  }
+
+  String trimId(String ? email)
+  {
+    RegExp regExp = RegExp(r'(.*)@gmail.com');
+
+    RegExpMatch? match = regExp.firstMatch(email!);
+
+    String ? data = " ";
+
+    if (match != null) {
+      data = match.group(1);
+      print('Data extracted: $data');
+    } else {
+      print('No match found.');
+    }
+
+    return data!;
+  }
+
 }
