@@ -219,6 +219,9 @@ class _profileScreenState extends State<profileScreen> {
                           'address' : address,
                           'canEdit' : false
                         }).then((value){
+                          setState(() {
+                            Users.canEdit = false;
+                          });
                           Utils().showToast("User Data uploaded successfully");
                         });
                       }
