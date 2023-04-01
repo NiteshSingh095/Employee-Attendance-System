@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:attendance_system/modal/user.dart';
 import 'package:attendance_system/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -119,15 +118,6 @@ class _profileScreenState extends State<profileScreen> {
             //  This field is used to get the last name of employee
               textField("Last Name","Last Name", lastNameController),
 
-              // This container contains the constant Date of Birth text
-              const Padding(
-                padding: EdgeInsets.only(top: 10.0, left: 14.0, bottom: 4),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Date of Birth", style: const TextStyle(fontWeight: FontWeight.w500),),
-                ),
-              ),
-
               // This container contains the date of birth field
               GestureDetector(
                 onTap: (){
@@ -161,20 +151,7 @@ class _profileScreenState extends State<profileScreen> {
                     });
                   });
                 },
-                child: Container(
-                  margin: const EdgeInsets.only(left: 13, right: 13),
-                  height: kTextTabBarHeight*1.15,
-                  width: screenWidth,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: Colors.black54)
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 10),
-                    alignment: Alignment.centerLeft,
-                    child:Text(birth, style: const TextStyle(color: Colors.black54, fontSize: 16),),
-                  ),
-                ),
+                child: field("birth", "Date Of Birth"),
               ),
 
               // This field is used to store address of employee
@@ -259,6 +236,39 @@ class _profileScreenState extends State<profileScreen> {
           ),
         ),
       )
+    );
+  }
+
+  Widget field(String text, String titleText)
+  {
+    return Column(
+      children: [
+
+        // This container contains the constant Date of Birth text
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 14.0, bottom: 4),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(titleText, style: const TextStyle(fontWeight: FontWeight.w500),),
+          ),
+        ),
+
+
+        Container(
+          margin: const EdgeInsets.only(left: 13, right: 13),
+          height: kTextTabBarHeight*1.15,
+          width: screenWidth,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(color: Colors.black54)
+          ),
+          child: Container(
+            padding: const EdgeInsets.only(left: 10),
+            alignment: Alignment.centerLeft,
+            child:Text(text, style: const TextStyle(color: Colors.black54, fontSize: 16),),
+          ),
+        ),
+      ],
     );
   }
 
