@@ -113,10 +113,10 @@ class _profileScreenState extends State<profileScreen> {
               const SizedBox(height: 15,),
 
               // This field is used to get the first name of employee
-              textField("First Name","First Name", firstNameController),
+              Users.canEdit ? textField("First Name", "First Name", firstNameController) : field(Users.firstName, "First Name"),
 
             //  This field is used to get the last name of employee
-              textField("Last Name","Last Name", lastNameController),
+              Users.canEdit ? textField("Last Name","Last Name", lastNameController) : field(Users.lastName,"Last Name"),
 
               // This container contains the date of birth field
               GestureDetector(
@@ -151,11 +151,11 @@ class _profileScreenState extends State<profileScreen> {
                     });
                   });
                 },
-                child: field("birth", "Date Of Birth"),
+                child: Users.canEdit ? field("birth", "Date Of Birth") : field(Users.birthDate, "Date of Birth"),
               ),
 
               // This field is used to store address of employee
-              textField("Address","Address", addressController),
+              Users.canEdit ? textField("Address","Address", addressController) : field(Users.address, "Address"),
 
               // This button is used to save all the information present in above fields
               Users.canEdit ? GestureDetector(
@@ -265,7 +265,7 @@ class _profileScreenState extends State<profileScreen> {
           child: Container(
             padding: const EdgeInsets.only(left: 10),
             alignment: Alignment.centerLeft,
-            child:Text(text, style: const TextStyle(color: Colors.black54, fontSize: 16),),
+            child:Text(text, style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
           ),
         ),
       ],
