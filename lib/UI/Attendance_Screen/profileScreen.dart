@@ -198,6 +198,10 @@ class _profileScreenState extends State<profileScreen> {
                         }).then((value){
                           setState(() {
                             Users.canEdit = false;
+                            Users.firstName = firstName;
+                            Users.lastName = lastName;
+                            Users.birthDate = birth;
+                            Users.address = address;
                           });
                           Utils().showToast("User Data uploaded successfully");
                         });
