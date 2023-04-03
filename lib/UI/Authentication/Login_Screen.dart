@@ -180,7 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           } else {
                             return null;
                           }
-                        }),
+                        },
+                    ),
                   ),
                   InkWell(
                     onTap: () {
@@ -264,13 +265,19 @@ class _LoginScreenState extends State<LoginScreen> {
           loading = false;
           Users.employeeId = emailId;
         });
-        
-        await FirebaseFirestore.instance.collection("Employee").add({"id":emailId});
 
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen()));
+        if(await checkIfRecordExists(Users.employeeId))
+          {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen()));
+          }
+        else
+          {
+            Utils().showToast("You need to register first");
+          }
+
       });
 
     }).onError((error, stackTrace){
@@ -301,4 +308,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return data!;
   }
+
+  Future<bool> checkIfRecordExists(String recordId) async {
+    bool exists = false;
+
+    // Get a reference to the Firestore collection
+    CollectionReference recordsRef = FirebaseFirestore.instance.collection("Employee");
+
+    // Query the collection for the specific record using its ID
+    QuerySnapshot snapshot = await recordsRef.where('id', isEqualTo: recordId).get();
+
+    // Check if the snapshot is not empty
+    if (snapshot != null && snapshot.size > 0)
+    {
+      exists = true;
+    }
+
+    return exists;
+  }
+
 }
