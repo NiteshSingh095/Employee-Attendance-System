@@ -131,8 +131,6 @@ class _signUpScreenState extends State<signUpScreen> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
-                        } else if (!EmailValidator.validate(value, true)) {
-                          return 'Invalid email address';
                         } else {
                           return null;
                         }
@@ -224,32 +222,34 @@ class _signUpScreenState extends State<signUpScreen> {
                       ],
                     ),
                     child: TextFormField(
-                        obscureText: true,
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          hintText: "enter strong password",
-                          prefixIcon: Icon(Icons.lock),
-                          contentPadding: EdgeInsets.all(3.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
+                      obscureText: true,
+                      controller: passwordController,
+                      decoration: const InputDecoration(
+                        hintText: "enter strong password",
+                        prefixIcon: Icon(Icons.lock),
+                        contentPadding: EdgeInsets.all(3.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(30)),
                         ),
-                        validator: (value) {
-                          RegExp regex = RegExp(
-                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter password';
-                          } else if (!regex.hasMatch(value)) {
-                            return 'Enter valid password';
-                          } else {
-                            return null;
-                          }
-                        }),
+                      ),
+                      validator: (value) {
+                        RegExp regex = RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter password';
+                        } else if (!regex.hasMatch(value)) {
+                          return 'Enter valid password';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
                   ),
 
                   // This container is for button to sign up
                   GestureDetector(
-                      onTap: () {
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
                         setState(() {
                           loading = true;
                         });
@@ -259,7 +259,7 @@ class _signUpScreenState extends State<signUpScreen> {
                                 email: emailController.text.toString(),
                                 password: passwordController.text.toString())
                             .then((value) {
-                              createNewUser();
+                          createNewUser();
                           setState(() {
                             loading = false;
                           });
@@ -274,44 +274,45 @@ class _signUpScreenState extends State<signUpScreen> {
                           });
                           Utils().showToast(error.toString());
                         });
-                      },
-                      child: Ink(
+                      }
+                    },
+                    child: Ink(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: screenWidth / 20,
+                            right: screenWidth / 20,
+                            bottom: screenHeight / 50,
+                            top: screenHeight / 50),
+                        width: screenWidth / 1.15,
+                        height: screenHeight / 20,
+                        child: Center(
+                          child: loading == true
+                              ? const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  "Register",
+                                  style: TextStyle(
+                                      fontSize: screenWidth / 25,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                        ),
                         decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              left: screenWidth / 20,
-                              right: screenWidth / 20,
-                              bottom: screenHeight / 50,
-                              top: screenHeight / 50),
-                          width: screenWidth / 1.15,
-                          height: screenHeight / 20,
-                          child: Center(
-                            child: loading == true
-                                ? const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  )
-                                : Text(
-                                    "Register",
-                                    style: TextStyle(
-                                        fontSize: screenWidth / 25,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                          ),
-                          decoration: const BoxDecoration(
-                              color: Colors.red,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 10,
-                                    offset: Offset(2, 2))
-                              ]),
-                        ),
-                      )),
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 10,
+                                  offset: Offset(2, 2))
+                            ]),
+                      ),
+                    ),
+                  ),
 
                   //This container contains the text button to move on login screen if alreay signup
                   Container(
@@ -343,7 +344,6 @@ class _signUpScreenState extends State<signUpScreen> {
   }
 
   void createNewUser() async {
-
     String userId = trimId(emailController.text.toString());
 
     await FirebaseFirestore.instance.collection("Employee").add({
@@ -355,13 +355,12 @@ class _signUpScreenState extends State<signUpScreen> {
     Utils().showToast("New User added");
   }
 
-  String trimId(String ? email)
-  {
+  String trimId(String? email) {
     RegExp regExp = RegExp(r'(.*)@gmail.com');
 
     RegExpMatch? match = regExp.firstMatch(email!);
 
-    String ? data = " ";
+    String? data = " ";
 
     if (match != null) {
       data = match.group(1);
@@ -372,5 +371,4 @@ class _signUpScreenState extends State<signUpScreen> {
 
     return data!;
   }
-
 }
