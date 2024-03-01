@@ -1,4 +1,6 @@
 import 'package:attendance_system/Firebase_Services/splash_services.dart';
+import 'package:attendance_system/modal/user.dart';
+import 'package:attendance_system/services/location_service.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

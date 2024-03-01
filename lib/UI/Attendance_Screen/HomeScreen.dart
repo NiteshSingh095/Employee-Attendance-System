@@ -1,6 +1,10 @@
+import 'dart:core';
+
+import 'package:attendance_system/UI/Attendance_Screen/OutOfLocation.dart';
 import 'package:attendance_system/UI/Attendance_Screen/calendarScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/profileScreen.dart';
 import 'package:attendance_system/UI/Attendance_Screen/todayScreen.dart';
+import 'package:attendance_system/modal/user.dart';
 import 'package:attendance_system/services/location_service.dart';
 import 'package:attendance_system/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       });
     });
-    _startLocationService();
+    // _startLocationService();
+    // _determineLocation();
   }
 
   void _getCredentials() async
@@ -97,6 +102,25 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
   }
+
+  // If not on the correct location
+  // Future<void> _determineLocation() async
+  // {
+  //   print(Users.lat);
+  //   print(Users.long);
+  //   if((Users.lat >= 12.84730 && Users.lat <= 12.84734) && (Users.long >= 80.225330 && Users.long <= 80.225341))
+  //   {
+  //     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LocationCheck()));
+  //   }
+  //   // else if((Users.lat >= 12.872 && Users.lat <= 12.874) && (Users.long >= 80.219 && Users.long <= 80.220))
+  //   //   {
+  //   //
+  //   //   }
+  //   else
+  //     {
+  //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LocationCheck()));
+  //     }
+  // }
 
   Future<void> getId() async
   {

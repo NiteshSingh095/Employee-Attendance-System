@@ -1,6 +1,11 @@
 import 'package:attendance_system/UI/Attendance_Screen/HomeScreen.dart';
 import 'package:attendance_system/UI/Authentication/SignUp.dart';
+import 'package:attendance_system/UI/Authentication/signinFace.dart';
+import 'package:attendance_system/services/facenet_service.dart';
+import 'package:attendance_system/services/location_service.dart';
+import 'package:attendance_system/services/ml_kit_service.dart';
 import 'package:attendance_system/utils/utils.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +23,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
+  FaceNetService _faceNetService = FaceNetService.faceNetService;
+  MLKitService _mlKitService = MLKitService();
+  // DataBaseService _dataBaseService = DataBaseService();
+
+  late CameraDescription cameraDescription;
+  String githubUrl = "https://github.com/The-Assembly";
+
   late SharedPreferences sharedPreferences;
 
   bool loading = false;
@@ -33,6 +45,34 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startLocationService();
+    _startup();
+  }
+
+  Future<void> _startLocationService() async
+  {
+    LocationService().initialize();
+
+    LocationService().getLongitude().then((value)
+    {
+      setState(() {
+        Users.long = double.parse(value!.toStringAsFixed(6));
+      });
+
+      LocationService().getLatitude().then((value)
+      {
+        setState(() {
+          Users.lat = double.parse(value!.toStringAsFixed(5));
+        });
+      });
+    });
+
+  }
 
   @override
   void dispose() {
@@ -232,10 +272,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Text("Don't have an account."),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => signUpScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => signUpScreen(
+                            cameraDescription: cameraDescription,
+                          ),
+                        ),
+                      );
                     },
                     child: const Text(
                       'SignUp',
@@ -260,6 +304,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       sharedPreferences = await SharedPreferences.getInstance();
 
+      setState(() {
+        // Users.uid = value.toString();
+        // Utils().showToast(value.uid.toString());
+      });
+
       sharedPreferences.setString("employeeId", emailId).then((value) async {
         setState(() {
           loading = false;
@@ -268,10 +317,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
         if(await checkIfRecordExists(Users.employeeId))
           {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomeScreen()));
+            // Navigation from login screen to face scan screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => SignIn(
+                  cameraDescription:cameraDescription,
+                ),
+              ),
+            );
           }
         else
           {
@@ -324,7 +378,37 @@ class _LoginScreenState extends State<LoginScreen> {
       exists = true;
     }
 
+    setState(() {
+      Users.uid = snapshot.docs[0].id;
+    });
+
     return exists;
   }
+
+  void _startup() async{
+    _setLoading(true);
+
+    List<CameraDescription> cameras = await availableCameras();
+
+    /// takes the front camera
+    cameraDescription = cameras.firstWhere(
+          (CameraDescription camera) =>
+      camera.lensDirection == CameraLensDirection.front,
+    );
+
+    // start the services
+    await _faceNetService.loadModel();
+    //  await _dataBaseService.loadDB();
+    _mlKitService.initialize();
+
+    _setLoading(false);
+  }
+
+    void _setLoading(bool value) {
+
+      setState(() {
+        loading = value;
+      });
+    }
 
 }

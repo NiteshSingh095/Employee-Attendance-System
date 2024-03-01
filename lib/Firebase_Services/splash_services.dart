@@ -11,6 +11,7 @@ import '../modal/user.dart';
 
 class SplashServics
 {
+
   void isLogin(BuildContext context) async
   {
 

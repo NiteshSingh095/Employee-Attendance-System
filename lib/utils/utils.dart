@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/foundation.dart';
 
 class Utils
 {
@@ -14,5 +15,11 @@ class Utils
         textColor: Colors.white,
         fontSize: 16.0
     );
+  }
+}
+
+printIfDebug(data) {
+  if (kDebugMode) {
+    print(data);
   }
 }

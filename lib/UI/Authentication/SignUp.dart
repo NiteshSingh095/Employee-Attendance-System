@@ -1,19 +1,41 @@
 import 'package:attendance_system/UI/Authentication/Login_Screen.dart';
+import 'package:attendance_system/UI/Authentication/signupFace.dart';
+import 'package:attendance_system/services/facenet_service.dart';
+import 'package:attendance_system/services/ml_kit_service.dart';
 import 'package:attendance_system/utils/utils.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class signUpScreen extends StatefulWidget {
-  const signUpScreen({Key? key}) : super(key: key);
+  final CameraDescription cameraDescription;
+  const signUpScreen({Key? key, required this.cameraDescription}) : super(key: key);
 
   @override
   State<signUpScreen> createState() => _signUpScreenState();
 }
 
 class _signUpScreenState extends State<signUpScreen> {
+
+  // FaceNetService _faceNetService = FaceNetService.faceNetService;
+  // MLKitService _mlKitService = MLKitService();
+  // // DataBaseService _dataBaseService = DataBaseService();
+  //
+  // late CameraDescription cameraDescription = super.cameraDescription1;
   bool loading = false;
+  // String githubUrl = "https://github.com/The-Assembly";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // _startup();
+  }
+
+  late SharedPreferences sharedPreferences2;
 
   double screenHeight = 0;
   double screenWidth = 0;
@@ -62,18 +84,18 @@ class _signUpScreenState extends State<signUpScreen> {
             //This container contains the code for icon widget
 
             Center(
-              child: Container(
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Icon(
-                    Icons.person_add,
-                    color: Colors.black54,
-                    size: screenHeight / 6,
+              child: InkWell(
+                onTap: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context)=> SignUp(cameraDescription: widget.cameraDescription)));
+                },
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
                   ),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black54, width: 4),
+                      borderRadius: const BorderRadius.all(Radius.circular(200))),
                 ),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black54, width: 4),
-                    borderRadius: const BorderRadius.all(Radius.circular(200))),
               ),
             ),
 
@@ -264,10 +286,12 @@ class _signUpScreenState extends State<signUpScreen> {
                             loading = false;
                           });
 
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (BuildContext context) => SignUp(
+                              cameraDescription: widget.cameraDescription,
+                            ),
+                          ));
+
                         }).onError((error, stackTrace) {
                           setState(() {
                             loading = false;
@@ -346,13 +370,17 @@ class _signUpScreenState extends State<signUpScreen> {
   void createNewUser() async {
     String userId = trimId(emailController.text.toString());
 
+    sharedPreferences2 = await SharedPreferences.getInstance();
+
     await FirebaseFirestore.instance.collection("Employee").add({
       'id': userId,
       'name': nameController.text.toString(),
       'email': emailController.text.toString(),
+    }).then((value){
+      sharedPreferences2.setString("UserUniqueId", value.id.toString());
     });
 
-    Utils().showToast("New User added");
+    // Utils().showToast("New User added");
   }
 
   String trimId(String? email) {
@@ -371,4 +399,30 @@ class _signUpScreenState extends State<signUpScreen> {
 
     return data!;
   }
+
+  // void _startup() async{
+  //   _setLoading(true);
+  //
+  //   List<CameraDescription> cameras = await availableCameras();
+  //
+  //   /// takes the front camera
+  //   cameraDescription = cameras.firstWhere(
+  //         (CameraDescription camera) =>
+  //     camera.lensDirection == CameraLensDirection.front,
+  //   );
+  //
+  //   // start the services
+  //   await _faceNetService.loadModel();
+  //   //  await _dataBaseService.loadDB();
+  //   _mlKitService.initialize();
+  //
+  //   _setLoading(false);
+  // }
+  //
+  // void _setLoading(bool value) {
+  //
+  //   setState(() {
+  //     loading = value;
+  //   });
+  // }
 }
